@@ -75,15 +75,18 @@ Widget _buildSearchBox() {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 16),
     decoration: BoxDecoration(
-      color: Colors.grey[900],
+      color: const Color.fromARGB(255, 239, 235, 235),
       borderRadius: BorderRadius.circular(8),
     ),
     child: const TextField(
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
       decoration: InputDecoration(
-        icon: Icon(Icons.search, color: Colors.white),
+        icon: Icon(Icons.search, color: Colors.black87, size: 30),
         hintText: 'Ne dinlemek istiyorsun?',
-        hintStyle: TextStyle(color: Colors.white54),
+        hintStyle: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.bold,
+        ),
         border: InputBorder.none,
       ),
     ),
@@ -105,44 +108,100 @@ Widget _buildCategoryGrid({bool bottomSet = false}) {
   final List<Map<String, dynamic>> items =
       bottomSet
           ? [
-            {'title': 'Keşfet', 'color': Colors.purple},
-            {'title': 'Senin için hazırlandı', 'color': Colors.blue},
-            {'title': 'Son müzik trendleri', 'color': Colors.blue[900]},
-            {'title': 'Güncel haberler', 'color': Colors.brown},
+            {
+              'title': 'Keşfet',
+              'color': Colors.purple,
+              'image': 'assets/images/kesfet.png',
+            },
+            {
+              'title': 'Senin için hazırlandı',
+              'color': Colors.blue,
+              'image': 'assets/images/senin-icin.png',
+            },
+            {
+              'title': 'Son müzik trendleri',
+              'color': Colors.blue[900],
+              'image': 'assets/images/trendler.png',
+            },
+            {
+              'title': 'Güncel haberler',
+              'color': Colors.brown,
+              'image': 'assets/images/haberler.png',
+            },
           ]
           : [
-            {'title': 'Müzik', 'color': Colors.deepPurple},
-            {'title': 'Podcast\'ler', 'color': Colors.red},
-            {'title': 'Listeler', 'color': Colors.blue},
-            {'title': 'Canlı Etkinlikler', 'color': Colors.pink},
+            {
+              'title': 'Müzik',
+              'color': Colors.deepPurple,
+              'image': 'assets/images/muzik.png',
+            },
+            {
+              'title': 'Podcast\'ler',
+              'color': Colors.red,
+              'image': 'assets/images/podcast.png',
+            },
+            {
+              'title': 'Listeler',
+              'color': Colors.blue,
+              'image': 'assets/images/listeler.png',
+            },
+            {
+              'title': 'Canlı Etkinlikler',
+              'color': Colors.pink,
+              'image': 'assets/images/canli-etkinlik.png',
+            },
           ];
 
   return GridView.builder(
-    shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
     itemCount: items.length,
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
-      childAspectRatio: 2.8,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 3 / 1, // Daha yatay görünüm
     ),
     itemBuilder: (context, index) {
+      final item = items[index];
       return Container(
-        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: items[index]['color'] as Color,
-          borderRadius: BorderRadius.circular(8),
+          color: item['color'],
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            items[index]['title']!,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
+        child: Stack(
+          children: [
+            // Sağ üst çapraz resim
+            Positioned(
+              top: 15,
+              right: 0,
+              child: Transform.rotate(
+                angle: -1, // Çapraz açı (yaklaşık -28 derece)
+                child: Image.asset(
+                  item['image'],
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                  opacity: const AlwaysStoppedAnimation(0.8), // biraz saydamlık
+                ),
+              ),
             ),
-          ),
+
+            // Sol alt metin
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Positioned(
+                child: Text(
+                  item['title'],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
     },
